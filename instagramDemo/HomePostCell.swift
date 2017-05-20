@@ -16,6 +16,12 @@ class HomePostCell: UICollectionViewCell {
         didSet {
             guard let imageURL = post?.imageURL else {return}
             photoImageView.loadImage(ImageURL: imageURL)
+            guard let profieImageURL = post?.user.profileImageURL else {return}
+            userProfileImage.loadImage(ImageURL: profieImageURL)
+            guard let profileName = post?.user.username else {return}
+            userProfileName.text = profileName
+            
+            setupAttributedCaption()
             
         }
     }
@@ -74,13 +80,6 @@ class HomePostCell: UICollectionViewCell {
     
     let captionLabel : UILabel = {
         let label = UILabel()
-        let attributedText = NSMutableAttributedString(string: "User Name ", attributes: [NSFontAttributeName : UIFont.boldSystemFont(ofSize: 14)])
-        attributedText.append(NSAttributedString(string: "Some text to represent the comment area of each post.", attributes: [NSFontAttributeName : UIFont.systemFont(ofSize: 14)]))
-        
-        attributedText.append(NSAttributedString(string: "\n\n", attributes: [NSFontAttributeName : UIFont.systemFont(ofSize: 4)]))
-        attributedText.append(NSAttributedString(string: "1 Week ago", attributes: [NSFontAttributeName : UIFont.systemFont(ofSize: 12), NSForegroundColorAttributeName : UIColor.gray]))
-        
-        label.attributedText = attributedText
         label.numberOfLines = 0
         return label
     }()
@@ -91,11 +90,10 @@ class HomePostCell: UICollectionViewCell {
         addSubview(userProfileImage)
         userProfileImage.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, topPadding: 12, leftPadding: 12, bottomPadding: 0, rightPadding: 0, width: self.imageProfileSize, height: self.imageProfileSize)
         userProfileImage.layer.cornerRadius = imageProfileSize / 2
-        userProfileImage.backgroundColor = .red
+        userProfileImage.image = #imageLiteral(resourceName: "user")
         
         addSubview(userProfileName)
         userProfileName.anchor(top: topAnchor, left: userProfileImage.rightAnchor, bottom: nil, right: nil, topPadding: 20, leftPadding: 8, bottomPadding: 0, rightPadding: 0, width: 0, height: 0)
-        userProfileName.text = "Omry Dabush"
         
         addSubview(moreButton)
         moreButton.anchor(top: topAnchor, left: nil, bottom: nil, right: rightAnchor, topPadding: 12, leftPadding: 0, bottomPadding: 0, rightPadding: 12, width: 0, height: 0)
@@ -111,8 +109,19 @@ class HomePostCell: UICollectionViewCell {
         captionLabel.anchor(top: likeButton.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topPadding: 0, leftPadding: 8, bottomPadding: 0, rightPadding: 8, width: 0, height: 0)
         
     }
+    fileprivate func setupAttributedCaption(){
+        guard let post = self.post else {return}
+        
+        let attributedText = NSMutableAttributedString(string: post.user.username, attributes: [NSFontAttributeName : UIFont.boldSystemFont(ofSize: 14)])
+        attributedText.append(NSAttributedString(string: " \(post.caption)", attributes: [NSFontAttributeName : UIFont.systemFont(ofSize: 14)]))
+        attributedText.append(NSAttributedString(string: "\n\n", attributes: [NSFontAttributeName : UIFont.systemFont(ofSize: 4)]))
+        attributedText.append(NSAttributedString(string: "1 Week ago", attributes: [NSFontAttributeName : UIFont.systemFont(ofSize: 12), NSForegroundColorAttributeName : UIColor.gray]))
+        
+        captionLabel.attributedText = attributedText
+    }
     
-    func setupActionButtons() {
+    
+    fileprivate func setupActionButtons() {
         let stackview = UIStackView(arrangedSubviews: [likeButton,commentButton,sendMessageButton])
         stackview.distribution = .fillEqually
         

@@ -24,7 +24,16 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
     
     fileprivate func fetchPosts() {
         guard let UserUID = FIRAuth.auth()?.currentUser?.uid else { return }
-        let ref = FIRDatabase.database().reference().child("posts").child(UserUID)
+        
+        FIRDatabase.fetchUserWithUID(uid: UserUID) { (user) in
+            self.fetchPostsWithUser(user: user)
+        }
+       
+    }
+    
+    fileprivate func fetchPostsWithUser(user : User) {
+        
+        let ref = FIRDatabase.database().reference().child("posts").child(user.uid)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let dictionaries = snapshot.value as? [String : Any] else {return}
             
@@ -32,7 +41,7 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
                 
                 guard let dictionary = value as? [String : Any] else {return}
                 
-                let post = Post(dictionary: dictionary)
+                let post = Post(user: user, dictionary: dictionary)
                 self.posts.append(post)
             })
             
@@ -52,7 +61,7 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
         var height = CGFloat(8 + 40 + 8) //Profile image with spacing
         height += view.frame.width //Making the image 1:1 ratio
         height += 50 // Action buttons area
-        height += 80 //Comment area
+        height += 40 //Comment area
         return CGSize(width: view.frame.width, height: height)
     }
     

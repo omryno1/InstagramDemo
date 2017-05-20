@@ -50,7 +50,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate{
         let homeNavConroller = templateNavController(unSelected: #imageLiteral(resourceName: "home_unselected"), selected: #imageLiteral(resourceName: "home_selected"), rootViewController: HomeController(collectionViewLayout: UICollectionViewFlowLayout()))
         
         //Search
-        let searchController = templateNavController(unSelected: #imageLiteral(resourceName: "search_unselected"), selected: #imageLiteral(resourceName: "search_selected"))
+        let searchController = templateNavController(unSelected: #imageLiteral(resourceName: "search_unselected"), selected: #imageLiteral(resourceName: "search_selected"), rootViewController: SearchController(collectionViewLayout: UICollectionViewFlowLayout()))
         
         //Add Photo
         let plusNavContoller = templateNavController(unSelected: #imageLiteral(resourceName: "plus"), selected: #imageLiteral(resourceName: "plus"))

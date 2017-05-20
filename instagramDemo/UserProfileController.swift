@@ -31,15 +31,11 @@ class UserProfileController : UICollectionViewController , UICollectionViewDeleg
     fileprivate func fetchUser() {
         
         guard let userUid = FIRAuth.auth()?.currentUser?.uid else {return}
-        FIRDatabase.database().reference().child("Users").child(userUid).observeSingleEvent(of: .value, with: { (snapshot) in
-            
-            guard let dictionary = snapshot.value as? [String : Any] else {return}
-            self.user = User(dictionary: dictionary)
+        
+        FIRDatabase.fetchUserWithUID(uid: userUid) { (user) in
+            self.user = user
             self.collectionView?.reloadData()
             self.navigationItem.title = self.user?.username
-            
-        }) { (err) in
-            print("Failed to fetch the user")
         }
     }
     
@@ -52,8 +48,10 @@ class UserProfileController : UICollectionViewController , UICollectionViewDeleg
             
             guard let dictionary = snapshot.value as? [String : Any] else {return}
             
-            let post = Post(dictionary: dictionary)
-            self.posts.append(post)
+            guard let user = self.user else {return}
+            
+            let post = Post(user: user, dictionary: dictionary)
+            self.posts.insert(post, at: 0)
             
             self.collectionView?.reloadData()
             

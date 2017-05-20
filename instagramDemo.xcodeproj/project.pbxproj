@@ -26,6 +26,9 @@
 		CD7B5F251E9F5F7D00BEF8BD /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F241E9F5F7D00BEF8BD /* Extentions.swift */; };
 		CD7B5F451EA11A8C00BEF8BD /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F441EA11A8C00BEF8BD /* MainTabBarController.swift */; };
 		CD7B5F471EA11B3500BEF8BD /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F461EA11B3500BEF8BD /* UserProfileController.swift */; };
+		CDCD72271ED02C6400C9225F /* FirebaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCD72261ED02C6400C9225F /* FirebaseUtils.swift */; };
+		CDCD722A1ED094E500C9225F /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCD72291ED094E500C9225F /* SearchController.swift */; };
+		CDCD722C1ED097A500C9225F /* SerachCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCD722B1ED097A500C9225F /* SerachCell.swift */; };
 		CDE3AEC71EA2149F00E38323 /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE3AEC61EA2149F00E38323 /* UserProfileHeader.swift */; };
 		CDEF4AB81EA9D38100FDD327 /* SharePhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDEF4AB71EA9D38100FDD327 /* SharePhotoController.swift */; };
 		E4AD5524CADFA346E9E736EB /* Pods_instagramDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B60E7CCF6B9FF61BAA35ED4 /* Pods_instagramDemo.framework */; };
@@ -55,6 +58,9 @@
 		CD7B5F241E9F5F7D00BEF8BD /* Extentions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
 		CD7B5F441EA11A8C00BEF8BD /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		CD7B5F461EA11B3500BEF8BD /* UserProfileController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
+		CDCD72261ED02C6400C9225F /* FirebaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseUtils.swift; sourceTree = "<group>"; };
+		CDCD72291ED094E500C9225F /* SearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
+		CDCD722B1ED097A500C9225F /* SerachCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerachCell.swift; sourceTree = "<group>"; };
 		CDE3AEC61EA2149F00E38323 /* UserProfileHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
 		CDEF4AB71EA9D38100FDD327 /* SharePhotoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharePhotoController.swift; sourceTree = "<group>"; };
 		D48C84643BFC26CCE7247179 /* Pods-instagramDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-instagramDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-instagramDemo/Pods-instagramDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -149,6 +155,7 @@
 		CD7B5F0E1E9F4AF000BEF8BD /* instagramDemo */ = {
 			isa = PBXGroup;
 			children = (
+				CDCD72281ED094C800C9225F /* Search */,
 				CD2EB9A51EB0DBDA00702F40 /* Models */,
 				CD30D2721EB86AAD0000C19F /* Home */,
 				CD1E9ABF1EA6599600F4102C /* AddPhoto */,
@@ -170,8 +177,18 @@
 			children = (
 				CD7B5F241E9F5F7D00BEF8BD /* Extentions.swift */,
 				CD30D2701EB85BE30000C19F /* CustomImageView.swift */,
+				CDCD72261ED02C6400C9225F /* FirebaseUtils.swift */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		CDCD72281ED094C800C9225F /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				CDCD72291ED094E500C9225F /* SearchController.swift */,
+				CDCD722B1ED097A500C9225F /* SerachCell.swift */,
+			);
+			name = Search;
 			sourceTree = "<group>";
 		};
 		CDE3AEC81EA214A400E38323 /* UserProfile */ = {
@@ -309,7 +326,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDCD72271ED02C6400C9225F /* FirebaseUtils.swift in Sources */,
 				CD2EB9A91EB0EC4E00702F40 /* User.swift in Sources */,
+				CDCD722A1ED094E500C9225F /* SearchController.swift in Sources */,
 				CD30D2761EB86AE20000C19F /* HomePostCell.swift in Sources */,
 				CDEF4AB81EA9D38100FDD327 /* SharePhotoController.swift in Sources */,
 				CD1E9AC31EA66A9100F4102C /* PhotoThumbnailCell.swift in Sources */,
@@ -324,6 +343,7 @@
 				CD7B5F471EA11B3500BEF8BD /* UserProfileController.swift in Sources */,
 				CD30D2741EB86AD30000C19F /* HomeController.swift in Sources */,
 				CD30D26F1EB7B2170000C19F /* UserProfilePhotoCell.swift in Sources */,
+				CDCD722C1ED097A500C9225F /* SerachCell.swift in Sources */,
 				CD7B5F251E9F5F7D00BEF8BD /* Extentions.swift in Sources */,
 				CD763EDB1EA3B5DA000CD637 /* LoginController.swift in Sources */,
 			);

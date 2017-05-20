@@ -103,6 +103,7 @@ class UserProfileHeader : UICollectionViewCell {
         profileImageView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, topPadding: 12, leftPadding: 12, bottomPadding: 0, rightPadding: 0, width: 80, height: 80)
         profileImageView.layer.cornerRadius = 80 / 2
         profileImageView.clipsToBounds = true
+        profileImageView.image = #imageLiteral(resourceName: "user")
         
         setupUserStats()
         
