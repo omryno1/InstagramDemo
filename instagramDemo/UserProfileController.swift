@@ -30,9 +30,9 @@ class UserProfileController : UICollectionViewController , UICollectionViewDeleg
     
     fileprivate func fetchUser() {
         
-        guard let userUid = FIRAuth.auth()?.currentUser?.uid else {return}
+		guard let userUid = Auth.auth().currentUser?.uid else {return}
         
-        FIRDatabase.fetchUserWithUID(uid: userUid) { (user) in
+		Database.fetchUserWithUID(uid: userUid) { (user) in
             self.user = user
             self.collectionView?.reloadData()
             self.navigationItem.title = self.user?.username
@@ -41,9 +41,9 @@ class UserProfileController : UICollectionViewController , UICollectionViewDeleg
     
     
     fileprivate func fetchOrderedPosts(){
-        guard let userUid = FIRAuth.auth()?.currentUser?.uid else {return}
+		guard let userUid = Auth.auth().currentUser?.uid else {return}
         
-        let ref = FIRDatabase.database().reference().child("posts").child(userUid)
+        let ref = Database.database().reference().child("posts").child(userUid)
         ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
             
             guard let dictionary = snapshot.value as? [String : Any] else {return}
@@ -65,12 +65,12 @@ class UserProfileController : UICollectionViewController , UICollectionViewDeleg
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogout))
     }
     
-    func handleLogout(){
+	@objc func handleLogout(){
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         alertController.addAction(UIAlertAction(title: "Log out", style: .destructive, handler: { (_) in
             do {
-                try FIRAuth.auth()?.signOut()
+				try Auth.auth().signOut()
                 let loginController = LoginController()
                 let navigationController = UINavigationController(rootViewController: loginController)
                 self.present(navigationController, animated: true, completion: nil)

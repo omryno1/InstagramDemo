@@ -10,7 +10,14 @@ import UIKit
 
 class SearchCell : UICollectionViewCell {
     
-    
+	var user : User? {
+		didSet {
+			guard let currentUser = user else {return}
+			usernameLabel.text = currentUser.username
+			profileImageView.loadImage(ImageURL: currentUser.profileImageURL)
+		}
+	}
+	
     let profileImageView : CustomImageView = {
         let iv = CustomImageView()
         iv.contentMode = .scaleAspectFit

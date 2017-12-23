@@ -67,8 +67,8 @@ class SignUpController: UIViewController , UIImagePickerControllerDelegate, UINa
     let alreadyHaveAccountButton: UIButton = {
         let button = UIButton(type: .system)
         
-        let attributedTextField = NSMutableAttributedString(string: "Already have an account?  ", attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14), NSForegroundColorAttributeName: UIColor.lightGray])
-        attributedTextField.append(NSAttributedString(string: "Login.", attributes: [NSFontAttributeName: UIFont.boldSystemFont(ofSize: 14), NSForegroundColorAttributeName : UIColor.rgb(red: 17, green: 154, blue: 237)]))
+        let attributedTextField = NSMutableAttributedString(string: "Already have an account?  ", attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14), NSAttributedStringKey.foregroundColor: UIColor.lightGray])
+        attributedTextField.append(NSAttributedString(string: "Login.", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14), NSAttributedStringKey.foregroundColor : UIColor.rgb(red: 17, green: 154, blue: 237)]))
         button.setAttributedTitle(attributedTextField, for: .normal)
         button.addTarget(self, action: #selector(handleShowLogin), for: .touchUpInside)
         return button
@@ -81,22 +81,30 @@ class SignUpController: UIViewController , UIImagePickerControllerDelegate, UINa
         
         
         view.addSubview(plusPhotoButton)
-        plusPhotoButton.anchor(top: view.topAnchor, left: nil, bottom: nil, right: nil, topPadding: 40, leftPadding: 0, bottomPadding: 0, rightPadding: 0, width: 140, height: 140)
+		if #available(iOS 11.0, *) {
+			plusPhotoButton.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: nil, bottom: nil, right: nil, topPadding: 40, leftPadding: 0, bottomPadding: 0, rightPadding: 0, width: 140, height: 140)
+		} else {
+			// Fallback on earlier versions
+		}
         plusPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         setupInputFields()
         
         view.addSubview(alreadyHaveAccountButton)
         
-        alreadyHaveAccountButton.anchor(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topPadding: 0, leftPadding: 0, bottomPadding: -10, rightPadding: 0, width: 0, height: 50)
+		if #available(iOS 11.0, *) {
+			alreadyHaveAccountButton.anchor(top: nil, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, topPadding: 0, leftPadding: 0, bottomPadding: -10, rightPadding: 0, width: 0, height: 50)
+		} else {
+			// Fallback on earlier versions
+		}
         
     }
     
-    func handleShowLogin(){
+    @objc func handleShowLogin(){
         _ = navigationController?.popViewController(animated: true)
     }
     
-    func handlePlusPhoto(){
+    @objc func handlePlusPhoto(){
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         imagePickerController.allowsEditing = true
@@ -115,10 +123,10 @@ class SignUpController: UIViewController , UIImagePickerControllerDelegate, UINa
         stackView.anchor(top: plusPhotoButton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topPadding: 20, leftPadding: 40, bottomPadding: 0, rightPadding: 40, width: 0, height: 200)
     }
     
-    func handleInputChange(){
-        let isFormValid = emailTextField.text?.characters.count ?? 0 > 0 &&
-            usernameTextField.text?.characters.count ?? 0 > 0 &&
-            passwordTextField.text?.characters.count ?? 0 > 0
+    @objc func handleInputChange(){
+        let isFormValid = emailTextField.text?.count ?? 0 > 0 &&
+            usernameTextField.text?.count ?? 0 > 0 &&
+            passwordTextField.text?.count ?? 0 > 0
         
         if isFormValid {
             signupButton.isEnabled = true
@@ -129,60 +137,55 @@ class SignUpController: UIViewController , UIImagePickerControllerDelegate, UINa
         }
     }
     
-    func handleSignUp(){
+    @objc func handleSignUp(){
         
-        guard let email = emailTextField.text, email.characters.count > 0 else {return}
-        guard let userName = usernameTextField.text, userName.characters.count > 0 else {return}
-        guard let password = passwordTextField.text, password.characters.count > 0 else {return}
+        guard let email = emailTextField.text, email.count > 0 else {return}
+        guard let userName = usernameTextField.text, userName.count > 0 else {return}
+        guard let password = passwordTextField.text, password.count > 0 else {return}
         
-        FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user : FIRUser?, error : Error?) in
-            
-            if let err = error {
-                print ("\(err.localizedDescription) Error while creating a user")
-                return
-            }
-            
-            //**Successfully created a new user**
-            print ("User has been created : \(user?.uid ?? "")")
-            
-        
-            let imageName = NSUUID().uuidString
-            
-            guard let profileImage = self.plusPhotoButton.imageView?.image else {return}
-            guard let data = UIImageJPEGRepresentation(profileImage, 0.3) else {return}
-            
-            FIRStorage.storage().reference().child("profile_images").child(imageName).put(data, metadata: nil, completion: { (metadata : FIRStorageMetadata?, err : Error?) in
-                if let err = err {
-                    print ("failed to upload image", err.localizedDescription)
-                }
-                
-                //**Successfully uploaded profile image
-                
-                
-                guard let imageURL = metadata?.downloadURL()?.absoluteString else {return}
-                
-                guard let uid = user?.uid else {return}
-                
-                let dictionaryValues = ["Username" : userName, "profile_image_URL" : imageURL]
-                let values = [uid : dictionaryValues]
-                
-                FIRDatabase.database().reference().child("Users").updateChildValues(values, withCompletionBlock: { (err : Error?, ref : FIRDatabaseReference) in
-                    if let err = err {
-                        print ("Fail to save file to DB", err.localizedDescription)
-                        return
-                    }
-                    
-                    print ("Successfully saved the user to DB")
-                    
-                    guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {return}
-                    mainTabBarController.setupViewControllers()
-                    self.dismiss(animated: true, completion: nil)
-                })
-            })
-        })
-    }
-    
-    
+		Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
+			if let err = error {
+				print ("\(err.localizedDescription) Error while creating a user")
+				return
+			}
+			
+			//**Successfully created a new user**
+			print ("User has been created : \(user?.uid ?? "")")
+			
+			let imageName = NSUUID().uuidString
+			
+			guard let profileImage = self.plusPhotoButton.imageView?.image else {return}
+			guard let data = UIImageJPEGRepresentation(profileImage, 0.3) else {return}
+			
+			Storage.storage().reference().child("profile_images").child(imageName).putData(data, metadata: nil, completion: { (metadata, err) in
+				if let err = err {
+					print ("failed to upload image", err.localizedDescription)
+				}
+				//**Successfully uploaded profile image
+				
+				guard let imageURL = metadata?.downloadURL()?.absoluteString else {return}
+				
+				guard let uid = user?.uid else {return}
+				
+				let dictionaryValues = ["Username" : userName, "profile_image_URL" : imageURL]
+				let values = [uid : dictionaryValues]
+				
+				Database.database().reference().child("Users").updateChildValues(values, withCompletionBlock: { (err : Error?, ref : DatabaseReference) in
+					if let err = err {
+						print ("Fail to save file to DB", err.localizedDescription)
+						return
+					}
+					
+					print ("Successfully saved the user to DB")
+					
+					guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {return}
+					mainTabBarController.setupViewControllers()
+					self.dismiss(animated: true, completion: nil)
+				})
+			})
+		})
+	}
+
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let originalImage = info["UIImagePickerControllerOriginalImage"] as? UIImage {
             plusPhotoButton.setImage(originalImage.withRenderingMode(.alwaysOriginal), for: .normal)

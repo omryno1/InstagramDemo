@@ -152,11 +152,11 @@ class AddPhotoController : UICollectionViewController, UICollectionViewDelegateF
         
     }
     
-    func handleCancelButton() {
+    @objc func handleCancelButton() {
         dismiss(animated: true, completion: nil)
     }
     
-    func handleNextButton() {
+   	@objc func handleNextButton() {
         let sharePhotoController = SharePhotoController()
         sharePhotoController.selectedImage = selectedImage
         navigationController?.pushViewController(sharePhotoController, animated: true)

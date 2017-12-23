@@ -65,7 +65,7 @@ class SharePhotoController: UIViewController, UITextViewDelegate {
         textView.text = placeHolder
     }
     
-    func handleShare(){
+    @objc func handleShare(){
         
         navigationItem.rightBarButtonItem?.isEnabled = false
         
@@ -75,7 +75,7 @@ class SharePhotoController: UIViewController, UITextViewDelegate {
         
         let fileName = NSUUID().uuidString
         
-        FIRStorage.storage().reference().child("Posts").child(fileName).put(data, metadata: nil) { (metadata, err) in
+        Storage.storage().reference().child("Posts").child(fileName).putData(data, metadata: nil) { (metadata, err) in
             if let err = err {
                 print ("Failed uploading to FireBase storage", err)
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
@@ -86,15 +86,26 @@ class SharePhotoController: UIViewController, UITextViewDelegate {
             print ("Successfully uploaded to Firebase storage")
             self.handleUploadToFIRDataBase(imageURL: imageURL, caption: caption)
         }
+//        put(data, metadata: nil) { (metadata, err) in
+//            if let err = err {
+//                print ("Failed uploading to FireBase storage", err)
+//                self.navigationItem.rightBarButtonItem?.isEnabled = true
+//                return
+//            }
+//
+//            guard let imageURL = metadata?.downloadURL()?.absoluteString else { return }
+//            print ("Successfully uploaded to Firebase storage")
+//            self.handleUploadToFIRDataBase(imageURL: imageURL, caption: caption)
+//        }
         
     }
     
     fileprivate func handleUploadToFIRDataBase(imageURL : String, caption : String) {
         
-        guard let uid = FIRAuth.auth()?.currentUser?.uid else { return }
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         guard let postImage = selectedImage else { return }
         
-        let userPostsRef = FIRDatabase.database().reference().child("posts").child(uid)
+        let userPostsRef = Database.database().reference().child("posts").child(uid)
         let ref = userPostsRef.childByAutoId()
         
         let values = ["imageURL": imageURL, "Caption" : caption, "ImageHeight" : postImage.size.height, "imageWidth" : postImage.size.width, "creationDate": Date().timeIntervalSince1970] as [String : Any]
@@ -126,7 +137,7 @@ class SharePhotoController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        if textView.text.characters.count > 0 {
+        if textView.text.count > 0 {
             self.navigationItem.rightBarButtonItem?.isEnabled = true
         }else {
             textView.endEditing(true)
