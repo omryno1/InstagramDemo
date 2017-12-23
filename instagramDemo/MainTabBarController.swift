@@ -30,7 +30,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-		if Auth.auth().currentUser == nil {
+		if Shared.shared().currenUser == nil {
             //Lets the UIwindow to load the tabbarController and then present the LoginController
             DispatchQueue.main.async {
                 let loginController = LoginController()
@@ -39,7 +39,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate{
             }
             return
         }
-        
+		
         self.delegate = self
         setupViewControllers()
     

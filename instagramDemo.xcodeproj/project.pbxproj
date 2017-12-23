@@ -17,6 +17,7 @@
 		CD30D2741EB86AD30000C19F /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD30D2731EB86AD30000C19F /* HomeController.swift */; };
 		CD30D2761EB86AE20000C19F /* HomePostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD30D2751EB86AE20000C19F /* HomePostCell.swift */; };
 		CD58D71D1EC3489E00D9D060 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD58D71C1EC3489E00D9D060 /* Assets.xcassets */; };
+		CD5E515A1FEE8CEA00F1F003 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5E51591FEE8CEA00F1F003 /* Shared.swift */; };
 		CD763EDB1EA3B5DA000CD637 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD763EDA1EA3B5DA000CD637 /* LoginController.swift */; };
 		CD7B5F101E9F4AF000BEF8BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F0F1E9F4AF000BEF8BD /* AppDelegate.swift */; };
 		CD7B5F121E9F4AF000BEF8BD /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F111E9F4AF000BEF8BD /* SignUpController.swift */; };
@@ -47,6 +48,7 @@
 		CD30D2731EB86AD30000C19F /* HomeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		CD30D2751EB86AE20000C19F /* HomePostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePostCell.swift; sourceTree = "<group>"; };
 		CD58D71C1EC3489E00D9D060 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CD5E51591FEE8CEA00F1F003 /* Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
 		CD763EDA1EA3B5DA000CD637 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		CD7B5F0C1E9F4AF000BEF8BD /* instagramDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = instagramDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD7B5F0F1E9F4AF000BEF8BD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				CD7B5F241E9F5F7D00BEF8BD /* Extentions.swift */,
 				CD30D2701EB85BE30000C19F /* CustomImageView.swift */,
 				CDCD72261ED02C6400C9225F /* FirebaseUtils.swift */,
+				CD5E51591FEE8CEA00F1F003 /* Shared.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -327,6 +330,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD5E515A1FEE8CEA00F1F003 /* Shared.swift in Sources */,
 				CDCD72271ED02C6400C9225F /* FirebaseUtils.swift in Sources */,
 				CD2EB9A91EB0EC4E00702F40 /* User.swift in Sources */,
 				CDCD722A1ED094E500C9225F /* SearchController.swift in Sources */,

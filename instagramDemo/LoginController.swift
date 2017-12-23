@@ -92,9 +92,7 @@ class LoginController  : UIViewController {
 			// Fallback on earlier versions
 		}
     }
-    
-    
-    
+	
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -121,9 +119,6 @@ class LoginController  : UIViewController {
                 print("Failed to sign in with email",err)
                 return
             }
-            
-            print("Logged in successfully", user?.uid ?? "")
-            
             guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {return}
 			
             mainTabBarController.delegate = mainTabBarController

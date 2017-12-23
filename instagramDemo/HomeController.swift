@@ -23,7 +23,7 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
 	}
 	
 	fileprivate func fetchPosts() {
-		guard let UserUID = Auth.auth().currentUser?.uid else { return }
+		guard let UserUID = Shared.shared().currenUser?.uid else { return }
 		
 		Database.fetchUserWithUID(uid: UserUID) { (user) in
 			self.fetchPostsWithUser(user: user)

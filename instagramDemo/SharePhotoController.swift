@@ -102,7 +102,7 @@ class SharePhotoController: UIViewController, UITextViewDelegate {
     
     fileprivate func handleUploadToFIRDataBase(imageURL : String, caption : String) {
         
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let uid = Shared.shared().currenUser?.uid else { return }
         guard let postImage = selectedImage else { return }
         
         let userPostsRef = Database.database().reference().child("posts").child(uid)

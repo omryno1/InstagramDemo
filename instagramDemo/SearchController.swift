@@ -24,6 +24,8 @@ class SearchController : UICollectionViewController, UICollectionViewDelegateFlo
 		return sb
 	}()
 	
+	//MARK: - Retain Cycle Methods
+	
 	override func viewDidLoad() {
 		
 		let navBar = navigationController?.navigationBar
@@ -33,9 +35,12 @@ class SearchController : UICollectionViewController, UICollectionViewDelegateFlo
 		collectionView?.backgroundColor = .white
 		collectionView?.register(SearchCell.self, forCellWithReuseIdentifier: cellID)
 		collectionView?.alwaysBounceVertical = true
-		
+		collectionView?.keyboardDismissMode = .onDrag
 		fetchUsers()
-		
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		self.searchBar.isHidden = false
 	}
 	
 	private func fetchUsers() {
@@ -44,6 +49,7 @@ class SearchController : UICollectionViewController, UICollectionViewDelegateFlo
 			guard let dictionaries = snapshot.value as? [String : Any] else { return }
 			
 			dictionaries.forEach({ (key, value) in
+				if (key == Shared.shared().currenUser?.uid) { return }
 				guard let dictionary = value as? [String : Any] else { return }
 				let user = User(uid: key, dictionary: dictionary)
 				self.users.append(user)
@@ -63,6 +69,7 @@ class SearchController : UICollectionViewController, UICollectionViewDelegateFlo
 	// MARK: - SearchBar Delegate
 	
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+		
 		if searchText.isEmpty {
 			filterdUser = users
 		}else {
@@ -89,4 +96,13 @@ class SearchController : UICollectionViewController, UICollectionViewDelegateFlo
 		cell.user = self.filterdUser[indexPath.item]
         return cell
     }
+	
+	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		self.searchBar.isHidden = true
+		self.searchBar.resignFirstResponder()
+		
+		let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+		userProfileController.userId = filterdUser[indexPath.item].uid
+		navigationController?.pushViewController(userProfileController, animated: true)
+	}
 }
