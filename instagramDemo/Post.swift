@@ -12,10 +12,13 @@ struct Post {
     let user : User
     let imageURL : String
     let caption : String
+	let creatinDate : Date
     
     init(user : User, dictionary: [String : Any]) {
         self.user = user
         imageURL = dictionary["imageURL"] as? String ?? ""
         caption = dictionary["Caption"] as? String ?? ""
+		let timeSince1970 = dictionary["creationDate"] as? Double ?? 0
+		creatinDate = Date(timeIntervalSince1970: timeSince1970)
     }
-}
+}	

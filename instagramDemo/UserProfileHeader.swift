@@ -147,7 +147,6 @@ class UserProfileHeader : UICollectionViewCell {
 			Database.database().reference().child("Following").child(currentUser.uid).child(userId).observeSingleEvent(of: .value, with: { (snapshot) in
 				if let isFollowing = snapshot.value as? Int, isFollowing == 1 {
 					self.mainProfileButton = .unFollow
-					print(isFollowing)
 					self.editProfileFollowButton.setTitle("Unfollow", for: .normal)
 				}else {
 					self.mainProfileButton = .Follow

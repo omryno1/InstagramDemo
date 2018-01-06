@@ -21,13 +21,34 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
 		
 		fetchPosts()
 	}
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		self.posts.removeAll()
+		fetchPosts()
+	}
 	
 	fileprivate func fetchPosts() {
 		guard let UserUID = Shared.shared().currenUser?.uid else { return }
-		
-		Database.fetchUserWithUID(uid: UserUID) { (user) in
-			self.fetchPostsWithUser(user: user)
+
+		Database.database().reference().child("Following").child(UserUID).observeSingleEvent(of: .value, with: { (snapshot) in
+			guard let followingDictionary = snapshot.value as? [String : Any] else {
+				self.posts.removeAll()
+				self.collectionView?.reloadData()
+				return
+			}
+			followingDictionary.forEach({ (key, value) in
+				Database.fetchUserWithUID(uid: key, complition: { (user) in
+					self.fetchPostsWithUser(user: user)
+				})
+			})
+			
+		}) { (err) in
+			print("Failed to fetch following id's")
 		}
+		
+//		Database.fetchUserWithUID(uid: UserUID) { (user) in
+//			self.fetchPostsWithUser(user: user)
+//		}
 		
 	}
 	
@@ -42,6 +63,10 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
 				
 				let post = Post(user: user, dictionary: dictionary)
 				self.posts.append(post)
+			})
+			
+			self.posts.sort(by: { (p1, p2) -> Bool in
+				return p1.creatinDate.compare(p2.creatinDate) == .orderedDescending
 			})
 			
 			self.collectionView?.reloadData()
