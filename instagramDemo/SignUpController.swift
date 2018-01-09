@@ -16,6 +16,7 @@ class SignUpController: UIViewController , UIImagePickerControllerDelegate, UINa
     let plusPhotoButton : UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
+		button.imageView?.contentMode = .scaleAspectFill
         button.addTarget(self, action: #selector(handlePlusPhoto), for: .touchUpInside)
         return button
     }()
@@ -104,7 +105,7 @@ class SignUpController: UIViewController , UIImagePickerControllerDelegate, UINa
         _ = navigationController?.popViewController(animated: true)
     }
     
-    @objc func handlePlusPhoto(){
+@objc func handlePlusPhoto(){
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         imagePickerController.allowsEditing = true

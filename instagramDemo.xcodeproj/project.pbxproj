@@ -27,6 +27,7 @@
 		CD7B5F251E9F5F7D00BEF8BD /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F241E9F5F7D00BEF8BD /* Extentions.swift */; };
 		CD7B5F451EA11A8C00BEF8BD /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F441EA11A8C00BEF8BD /* MainTabBarController.swift */; };
 		CD7B5F471EA11B3500BEF8BD /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F461EA11B3500BEF8BD /* UserProfileController.swift */; };
+		CDC4C3D22005021B0027E78E /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4C3D12005021B0027E78E /* CameraController.swift */; };
 		CDCD72271ED02C6400C9225F /* FirebaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCD72261ED02C6400C9225F /* FirebaseUtils.swift */; };
 		CDCD722A1ED094E500C9225F /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCD72291ED094E500C9225F /* SearchController.swift */; };
 		CDCD722C1ED097A500C9225F /* SerachCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCD722B1ED097A500C9225F /* SerachCell.swift */; };
@@ -60,6 +61,7 @@
 		CD7B5F241E9F5F7D00BEF8BD /* Extentions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
 		CD7B5F441EA11A8C00BEF8BD /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		CD7B5F461EA11B3500BEF8BD /* UserProfileController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
+		CDC4C3D12005021B0027E78E /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		CDCD72261ED02C6400C9225F /* FirebaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseUtils.swift; sourceTree = "<group>"; };
 		CDCD72291ED094E500C9225F /* SearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
 		CDCD722B1ED097A500C9225F /* SerachCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerachCell.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 		CD7B5F0E1E9F4AF000BEF8BD /* instagramDemo */ = {
 			isa = PBXGroup;
 			children = (
+				CDC4C3D0200502040027E78E /* Camera */,
 				CDCD72281ED094C800C9225F /* Search */,
 				CD2EB9A51EB0DBDA00702F40 /* Models */,
 				CD30D2721EB86AAD0000C19F /* Home */,
@@ -183,6 +186,14 @@
 				CD5E51591FEE8CEA00F1F003 /* Shared.swift */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		CDC4C3D0200502040027E78E /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				CDC4C3D12005021B0027E78E /* CameraController.swift */,
+			);
+			name = Camera;
 			sourceTree = "<group>";
 		};
 		CDCD72281ED094C800C9225F /* Search */ = {
@@ -336,6 +347,7 @@
 				CDCD722A1ED094E500C9225F /* SearchController.swift in Sources */,
 				CD30D2761EB86AE20000C19F /* HomePostCell.swift in Sources */,
 				CDEF4AB81EA9D38100FDD327 /* SharePhotoController.swift in Sources */,
+				CDC4C3D22005021B0027E78E /* CameraController.swift in Sources */,
 				CD1E9AC31EA66A9100F4102C /* PhotoThumbnailCell.swift in Sources */,
 				CD7B5F121E9F4AF000BEF8BD /* SignUpController.swift in Sources */,
 				CD30D2711EB85BE30000C19F /* CustomImageView.swift in Sources */,

@@ -20,7 +20,7 @@ class SearchCell : UICollectionViewCell {
 	
     let profileImageView : CustomImageView = {
         let iv = CustomImageView()
-        iv.contentMode = .scaleAspectFit
+        iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.image = #imageLiteral(resourceName: "user")
         return iv

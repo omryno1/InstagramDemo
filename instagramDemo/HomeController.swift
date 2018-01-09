@@ -24,7 +24,7 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
 		let refreshControl = UIRefreshControl()
 		refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
 		collectionView?.refreshControl = refreshControl
-		
+		setupNavigationItems()
 		fetchAllPosts()
 	}
 	
@@ -96,6 +96,15 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
 		}
 	}
 	
+	fileprivate func setupNavigationItems(){
+		navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo2"))
+		navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "LeftNavBtn").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleCamera))
+	}
+	
+	@objc fileprivate func handleCamera(){
+		let cameraVC = CameraController()
+		present(cameraVC, animated: true, completion: nil)
+	}
 	
 	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return posts.count

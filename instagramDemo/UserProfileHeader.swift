@@ -29,6 +29,7 @@ class UserProfileHeader : UICollectionViewCell {
     
     let profileImageView : CustomImageView = {
         let iv = CustomImageView()
+		iv.contentMode = .scaleAspectFill
         return iv
     }()
     
