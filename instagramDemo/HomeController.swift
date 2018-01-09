@@ -16,24 +16,50 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		NotificationCenter.default.addObserver(self, selector: #selector(handleRefresh), name: SharePhotoController.updateFeedNotificationName, object: nil)
+		
 		collectionView?.backgroundColor = .white
 		collectionView?.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
 		
-		fetchPosts()
+		let refreshControl = UIRefreshControl()
+		refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+		collectionView?.refreshControl = refreshControl
+		
+		fetchAllPosts()
 	}
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-		self.posts.removeAll()
+	
+	func fetchAllPosts(){
 		fetchPosts()
+		fetchFollowingUserPosts()
+	}
+	
+	@objc func handleRefresh(){
+		print("refreshing ...")
+		collectionView?.isUserInteractionEnabled = false
+		self.posts.removeAll()
+		collectionView?.reloadData()
+		fetchAllPosts()
+	}
+	
+	@objc func EndRefredhing() {
+		self.collectionView?.refreshControl?.endRefreshing()
+		self.collectionView?.isUserInteractionEnabled = true
+		self.collectionView?.reloadData()
 	}
 	
 	fileprivate func fetchPosts() {
 		guard let UserUID = Shared.shared().currenUser?.uid else { return }
-
+		Database.fetchUserWithUID(uid: UserUID) { (user) in
+			self.fetchPostsWithUser(user: user)
+		}
+		
+	}
+	
+	fileprivate func fetchFollowingUserPosts(){
+		guard let UserUID = Shared.shared().currenUser?.uid else { return }
 		Database.database().reference().child("Following").child(UserUID).observeSingleEvent(of: .value, with: { (snapshot) in
 			guard let followingDictionary = snapshot.value as? [String : Any] else {
-				self.posts.removeAll()
-				self.collectionView?.reloadData()
+				self.EndRefredhing()
 				return
 			}
 			followingDictionary.forEach({ (key, value) in
@@ -45,18 +71,12 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
 		}) { (err) in
 			print("Failed to fetch following id's")
 		}
-		
-//		Database.fetchUserWithUID(uid: UserUID) { (user) in
-//			self.fetchPostsWithUser(user: user)
-//		}
-		
 	}
 	
 	fileprivate func fetchPostsWithUser(user : User) {
 		let ref = Database.database().reference().child("posts").child(user.uid)
 		ref.observeSingleEvent(of: .value, with: { (snapshot) in
 			guard let dictionaries = snapshot.value as? [String : Any] else {return}
-			
 			dictionaries.forEach({ (key, value) in
 				
 				guard let dictionary = value as? [String : Any] else {return}
@@ -69,12 +89,13 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
 				return p1.creatinDate.compare(p2.creatinDate) == .orderedDescending
 			})
 			
-			self.collectionView?.reloadData()
+			self.EndRefredhing()
 			
 		}) { (error) in
 			print("Failed to fetch posts", error)
 		}
 	}
+	
 	
 	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return posts.count
