@@ -9,7 +9,12 @@
 import UIKit
 import AVFoundation
 
-class CameraController: UIViewController {
+class CameraController: UIViewController, AVCapturePhotoCaptureDelegate{
+	
+	let captureSession = AVCaptureSession()
+	let output = AVCapturePhotoOutput()
+	let previewLayer = AVCaptureVideoPreviewLayer()
+	var isCaptureSessionConfigured = false
 	
 	let dismissButton: UIButton = {
 		let bt = UIButton(type: .system)
@@ -25,9 +30,45 @@ class CameraController: UIViewController {
 		return bt
 	}()
 	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		if (isCaptureSessionConfigured) {
+			if (!self.captureSession.isRunning) {
+				self.captureSession.startRunning()
+			}
+		}else {
+			Shared.shared().checkCameraAuthorization({ (authorized) in
+				guard authorized else {
+					print("Permission to use camera denied.")
+					return
+				}
+				DispatchQueue.global().async {
+					self.setupCaptureSession({ (success) in
+						guard success else { return }
+						DispatchQueue.main.async {
+							//4. Setup Output preview
+							self.previewLayer.session = self.captureSession
+							self.previewLayer.frame = CGRect(x: 0, y: 44, width: self.view.frame.width, height: self.view.frame.height - 88)
+							self.previewLayer.videoGravity = .resizeAspectFill
+							
+							self.isCaptureSessionConfigured = true
+							self.captureSession.startRunning()
+						}
+					})
+				}
+			})
+		}
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		if self.captureSession.isRunning {
+			self.captureSession.startRunning()
+		}
+	}
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setupCaptureSession()
 		setupHUD()
 	
 	}
@@ -37,40 +78,83 @@ class CameraController: UIViewController {
 	}
 	@objc func handleCapture() {
 		print("Capture Image")
+
+		let captureSettings = AVCapturePhotoSettings()
+		captureSettings.flashMode = .auto
+		captureSettings.isHighResolutionPhotoEnabled = true
+		captureSettings.isAutoStillImageStabilizationEnabled = true
+		
+		let previewFormatType = NSNumber(value: kCVPixelFormatType_32BGRA)
+		if captureSettings.availablePreviewPhotoPixelFormatTypes.contains(OSType(truncating: previewFormatType)) {
+			captureSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String : 	previewFormatType]
+			self.output.capturePhoto(with: captureSettings, delegate: self)
+		}
 	}
 	
-	fileprivate func setupCaptureSession() {
-		let captureSession = AVCaptureSession()
-		guard let captureDevice = AVCaptureDevice.default(for: .video) else { return }
+	func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
+		
+		let imageData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer!, previewPhotoSampleBuffer: previewPhotoSampleBuffer!)
+		
+		let previewImage = UIImage(data: imageData!)
+		
+		
+		let previewImageView = UIImageView(image: previewImage)
+		previewImageView.contentMode = .scaleAspectFit
+		view.addSubview(previewImageView)
+		if #available(iOS 11.0, *) {
+			previewImageView.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, topPadding: 0, leftPadding: 0, bottomPadding: 0, rightPadding: 0, width: 0, height: 0)
+		} else {
+			previewImageView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topPadding: 0, leftPadding: 0, bottomPadding: 0, rightPadding: 0, width: 0, height: 0)
+		}
+		
+		print("Finish processing photo sample buffer...")
+	}
+	
+	fileprivate func setupCaptureSession(_ completionHandler: ((_ success: Bool)-> Void)) {
+		
+		var success = false
+		defer { completionHandler(success) } // Ensure all exit paths call completion handler.
 		
 		//1. Setup Inputs
+		let captureDevice = defaultDevice()
 		do {
 			let input = try AVCaptureDeviceInput(device: captureDevice)
 			if captureSession.canAddInput(input) {
 				captureSession.addInput(input)
 			}
 		}catch let err {
-			print("Failed to get device input ", err)
+			print("Unable to obtain video input for default camera. :  \(err)")
 		}
+		
 		//2. Setup Outputs
-		let output = AVCapturePhotoOutput()
+		self.output.isHighResolutionCaptureEnabled = true
+		self.output.isLivePhotoCaptureEnabled = output.isLivePhotoCaptureSupported
 		if captureSession.canAddOutput(output){
 			captureSession.addOutput(output)
 		}
 		
-		//3. Setup Output preview
-		let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-		previewLayer.frame = CGRect(x: 0, y: 44, width: view.frame.width, height: view.frame.height - 88)
-		previewLayer.videoGravity = .resizeAspectFill
-		view.layer.addSublayer(previewLayer)
+		//3. Configuring the session
+		self.captureSession.beginConfiguration()
+		self.captureSession.sessionPreset = AVCaptureSession.Preset.photo
+		self.captureSession.commitConfiguration()
 		
-		
-		captureSession.startRunning()
+		success = true
+	}
+	
+	func defaultDevice() -> AVCaptureDevice {
+		if let device = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back) {
+			return device // use dual camera on supported devices
+		} else if let device = AVCaptureDevice.default( .builtInWideAngleCamera,for: .video, position: .back) {
+			return device // use default back facing camera otherwise
+		} else {
+			fatalError("All supported devices are expected to have at least one of the queried capture devices.")
+		}
 	}
 	
 	fileprivate func setupHUD() {
+		view.layer.addSublayer(self.previewLayer)
+		
 		view.addSubview(dismissButton)
-		view.addSubview(captureButton)
 		if #available(iOS 11.0, *) {
 			dismissButton.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: nil, bottom: nil , right: view.rightAnchor, topPadding: 12, leftPadding: 0, bottomPadding: 0, rightPadding: 12, width: 50, height: 50)
 		}else {
