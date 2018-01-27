@@ -30,6 +30,17 @@ class CameraController: UIViewController, AVCapturePhotoCaptureDelegate{
 		return bt
 	}()
 	
+	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+		self.previewLayer.cornerRadius = 10
+		if #available(iOS 11.0, *) {
+			self.previewLayer.frame = CGRect(x: 0, y: view.safeAreaInsets.top , width: view.frame.width, height: view.frame.width * (4/3))
+		} else {
+			self.previewLayer.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height * (4/3))
+		}
+		self.view.layoutSubviews()
+	}
+	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		if (isCaptureSessionConfigured) {
@@ -47,9 +58,9 @@ class CameraController: UIViewController, AVCapturePhotoCaptureDelegate{
 						guard success else { return }
 						DispatchQueue.main.async {
 							//4. Setup Output preview
-							self.previewLayer.session = self.captureSession
-							self.previewLayer.frame = CGRect(x: 0, y: 44, width: self.view.frame.width, height: self.view.frame.height - 88)
+							
 							self.previewLayer.videoGravity = .resizeAspectFill
+							self.previewLayer.session = self.captureSession
 							
 							self.isCaptureSessionConfigured = true
 							self.captureSession.startRunning()
@@ -97,14 +108,16 @@ class CameraController: UIViewController, AVCapturePhotoCaptureDelegate{
 		
 		let previewImage = UIImage(data: imageData!)
 		
+		//TODO: need to stop the CaptureSession while displaying the image captured
+//		let previewImageView = UIImageView(image: previewImage)
 		
-		let previewImageView = UIImageView(image: previewImage)
-		previewImageView.contentMode = .scaleAspectFit
-		view.addSubview(previewImageView)
+		let containerView = PreviewPhotoContainerView(frame: view.frame)
+		containerView.previewImageView.image = previewImage
+		view.addSubview(containerView)
 		if #available(iOS 11.0, *) {
-			previewImageView.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, topPadding: 0, leftPadding: 0, bottomPadding: 0, rightPadding: 0, width: 0, height: 0)
+			containerView.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.safeAreaLayoutGuide.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.safeAreaLayoutGuide.rightAnchor, topPadding: 0, leftPadding: 0, bottomPadding: 0, rightPadding: 0, width: 0, height: 0)
 		} else {
-			previewImageView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topPadding: 0, leftPadding: 0, bottomPadding: 0, rightPadding: 0, width: 0, height: 0)
+				containerView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topPadding: 0, leftPadding: 0, bottomPadding: 0, rightPadding: 0, width: 0, height: 0)
 		}
 		
 		print("Finish processing photo sample buffer...")
@@ -135,7 +148,7 @@ class CameraController: UIViewController, AVCapturePhotoCaptureDelegate{
 		
 		//3. Configuring the session
 		self.captureSession.beginConfiguration()
-		self.captureSession.sessionPreset = AVCaptureSession.Preset.photo
+		self.captureSession.sessionPreset = .photo
 		self.captureSession.commitConfiguration()
 		
 		success = true
