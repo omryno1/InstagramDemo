@@ -27,6 +27,7 @@
 		CD7B5F251E9F5F7D00BEF8BD /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F241E9F5F7D00BEF8BD /* Extentions.swift */; };
 		CD7B5F451EA11A8C00BEF8BD /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F441EA11A8C00BEF8BD /* MainTabBarController.swift */; };
 		CD7B5F471EA11B3500BEF8BD /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F461EA11B3500BEF8BD /* UserProfileController.swift */; };
+		CD9F796F201903C80093C53F /* PreviewPhotoContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9F796E201903C80093C53F /* PreviewPhotoContainerView.swift */; };
 		CDC4C3D22005021B0027E78E /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4C3D12005021B0027E78E /* CameraController.swift */; };
 		CDCD72271ED02C6400C9225F /* FirebaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCD72261ED02C6400C9225F /* FirebaseUtils.swift */; };
 		CDCD722A1ED094E500C9225F /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCD72291ED094E500C9225F /* SearchController.swift */; };
@@ -61,6 +62,7 @@
 		CD7B5F241E9F5F7D00BEF8BD /* Extentions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
 		CD7B5F441EA11A8C00BEF8BD /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		CD7B5F461EA11B3500BEF8BD /* UserProfileController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
+		CD9F796E201903C80093C53F /* PreviewPhotoContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPhotoContainerView.swift; sourceTree = "<group>"; };
 		CDC4C3D12005021B0027E78E /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		CDCD72261ED02C6400C9225F /* FirebaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseUtils.swift; sourceTree = "<group>"; };
 		CDCD72291ED094E500C9225F /* SearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				CDC4C3D12005021B0027E78E /* CameraController.swift */,
+				CD9F796E201903C80093C53F /* PreviewPhotoContainerView.swift */,
 			);
 			name = Camera;
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 				CD1E9AC11EA659AC00F4102C /* AddPhotoController.swift in Sources */,
 				CD7B5F451EA11A8C00BEF8BD /* MainTabBarController.swift in Sources */,
 				CDE3AEC71EA2149F00E38323 /* UserProfileHeader.swift in Sources */,
+				CD9F796F201903C80093C53F /* PreviewPhotoContainerView.swift in Sources */,
 				CD2EB9A71EB0DBEC00702F40 /* Post.swift in Sources */,
 				CD25EC1F1EA87B00001DF2D8 /* PhotoPreviewHeader.swift in Sources */,
 				CD7B5F471EA11B3500BEF8BD /* UserProfileController.swift in Sources */,
