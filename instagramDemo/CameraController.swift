@@ -80,6 +80,7 @@ class CameraController: UIViewController, AVCapturePhotoCaptureDelegate{
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		transitioningDelegate = self
 		setupHUD()
 	
 	}
@@ -112,6 +113,7 @@ class CameraController: UIViewController, AVCapturePhotoCaptureDelegate{
 //		let previewImageView = UIImageView(image: previewImage)
 		
 		let containerView = PreviewPhotoContainerView(frame: view.frame)
+		containerView.imageData = imageData
 		containerView.previewImageView.image = previewImage
 		view.addSubview(containerView)
 		if #available(iOS 11.0, *) {
@@ -182,5 +184,16 @@ class CameraController: UIViewController, AVCapturePhotoCaptureDelegate{
 		}
 		captureButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
 		
+	}
+}
+
+extension CameraController : UIViewControllerTransitioningDelegate {
+	
+	func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+		return CustomAnimationPresentor()
+	}
+	
+	func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+		return CustomAnimationDismisser()
 	}
 }

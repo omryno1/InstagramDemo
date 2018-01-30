@@ -27,6 +27,8 @@
 		CD7B5F251E9F5F7D00BEF8BD /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F241E9F5F7D00BEF8BD /* Extentions.swift */; };
 		CD7B5F451EA11A8C00BEF8BD /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F441EA11A8C00BEF8BD /* MainTabBarController.swift */; };
 		CD7B5F471EA11B3500BEF8BD /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F461EA11B3500BEF8BD /* UserProfileController.swift */; };
+		CD99AA4B201F7EEC0011B6E7 /* CustomAnimationPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD99AA4A201F7EEC0011B6E7 /* CustomAnimationPresentor.swift */; };
+		CD99AA4D201F7F010011B6E7 /* CustomAnimationDismisser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD99AA4C201F7F010011B6E7 /* CustomAnimationDismisser.swift */; };
 		CD9F796F201903C80093C53F /* PreviewPhotoContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9F796E201903C80093C53F /* PreviewPhotoContainerView.swift */; };
 		CDC4C3D22005021B0027E78E /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4C3D12005021B0027E78E /* CameraController.swift */; };
 		CDCD72271ED02C6400C9225F /* FirebaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCD72261ED02C6400C9225F /* FirebaseUtils.swift */; };
@@ -62,6 +64,8 @@
 		CD7B5F241E9F5F7D00BEF8BD /* Extentions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
 		CD7B5F441EA11A8C00BEF8BD /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		CD7B5F461EA11B3500BEF8BD /* UserProfileController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
+		CD99AA4A201F7EEC0011B6E7 /* CustomAnimationPresentor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationPresentor.swift; sourceTree = "<group>"; };
+		CD99AA4C201F7F010011B6E7 /* CustomAnimationDismisser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationDismisser.swift; sourceTree = "<group>"; };
 		CD9F796E201903C80093C53F /* PreviewPhotoContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPhotoContainerView.swift; sourceTree = "<group>"; };
 		CDC4C3D12005021B0027E78E /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		CDCD72261ED02C6400C9225F /* FirebaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseUtils.swift; sourceTree = "<group>"; };
@@ -195,6 +199,8 @@
 			children = (
 				CDC4C3D12005021B0027E78E /* CameraController.swift */,
 				CD9F796E201903C80093C53F /* PreviewPhotoContainerView.swift */,
+				CD99AA4A201F7EEC0011B6E7 /* CustomAnimationPresentor.swift */,
+				CD99AA4C201F7F010011B6E7 /* CustomAnimationDismisser.swift */,
 			);
 			name = Camera;
 			sourceTree = "<group>";
@@ -346,6 +352,7 @@
 			files = (
 				CD5E515A1FEE8CEA00F1F003 /* Shared.swift in Sources */,
 				CDCD72271ED02C6400C9225F /* FirebaseUtils.swift in Sources */,
+				CD99AA4D201F7F010011B6E7 /* CustomAnimationDismisser.swift in Sources */,
 				CD2EB9A91EB0EC4E00702F40 /* User.swift in Sources */,
 				CDCD722A1ED094E500C9225F /* SearchController.swift in Sources */,
 				CD30D2761EB86AE20000C19F /* HomePostCell.swift in Sources */,
@@ -366,6 +373,7 @@
 				CD30D26F1EB7B2170000C19F /* UserProfilePhotoCell.swift in Sources */,
 				CDCD722C1ED097A500C9225F /* SerachCell.swift in Sources */,
 				CD7B5F251E9F5F7D00BEF8BD /* Extentions.swift in Sources */,
+				CD99AA4B201F7EEC0011B6E7 /* CustomAnimationPresentor.swift in Sources */,
 				CD763EDB1EA3B5DA000CD637 /* LoginController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
