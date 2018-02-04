@@ -9,9 +9,10 @@
 import UIKit
 import Firebase
 
-class HomeController : UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class HomeController : UICollectionViewController {
 	
-	let cellId = "cellId"
+//	let cellID = "cellId"
+	let cellID = Shared.shared().cellID
 	var posts = [Post]()
 	
 	override func viewDidLoad() {
@@ -19,7 +20,7 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
 		NotificationCenter.default.addObserver(self, selector: #selector(handleRefresh), name: SharePhotoController.updateFeedNotificationName, object: nil)
 		
 		collectionView?.backgroundColor = .white
-		collectionView?.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
+		collectionView?.register(HomePostCell.self, forCellWithReuseIdentifier: cellID)
 		
 		let refreshControl = UIRefreshControl()
 		refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
@@ -51,8 +52,7 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
 		guard let UserUID = Shared.shared().currenUser?.uid else { return }
 		Database.fetchUserWithUID(uid: UserUID) { (user) in
 			self.fetchPostsWithUser(user: user)
-		}
-		
+		}		
 	}
 	
 	fileprivate func fetchFollowingUserPosts(){
@@ -106,10 +106,24 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
 		present(cameraVC, animated: true, completion: nil)
 	}
 	
+}
+
+extension HomeController : HomePostCellDelegate, UICollectionViewDelegateFlowLayout {
+	
+	//HomePostCellDelegate
+	func didTapComment(post: Post) {
+		let commentsController = CommentsConroller(collectionViewLayout: UICollectionViewLayout())
+		print("\(post.caption)")
+		self.hidesBottomBarWhenPushed = true
+		navigationController?.pushViewController(commentsController, animated: true)
+		self.hidesBottomBarWhenPushed = false
+	}
+	
 	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return posts.count
 	}
 	
+	//CollectionView Delegate	
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 		
 		var height = CGFloat(8 + 40 + 8) //Profile image with spacing
@@ -120,10 +134,10 @@ class HomeController : UICollectionViewController, UICollectionViewDelegateFlowL
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! HomePostCell
+		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! HomePostCell
 		
 		cell.post = posts[indexPath.item]
-		
+		cell.delegate = self
 		return cell
 	}
 }

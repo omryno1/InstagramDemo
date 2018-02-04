@@ -11,6 +11,7 @@ import UIKit
 class HomePostCell: UICollectionViewCell {
     
     let imageProfileSize = CGFloat(40)
+	var delegate : HomePostCellDelegate?
     
     var post : Post? {
         didSet {
@@ -59,9 +60,10 @@ class HomePostCell: UICollectionViewCell {
         return bt
     }()
     
-    let commentButton : UIButton = {
+    lazy var commentButton : UIButton = {
         let bt = UIButton(type: .system)
         bt.setImage(#imageLiteral(resourceName: "comment").withRenderingMode(.alwaysOriginal), for: .normal)
+		bt.addTarget(self, action: #selector(handleComment), for: .touchUpInside)
         return bt
     }()
     
@@ -82,6 +84,12 @@ class HomePostCell: UICollectionViewCell {
         label.numberOfLines = 0
         return label
     }()
+	
+	@objc func handleComment() {
+		print("Comment Was Tapped")
+		guard let post = self.post else { return }
+		self.delegate?.didTapComment(post: post)
+	}
     
     override init(frame: CGRect) {
         super.init(frame: frame)

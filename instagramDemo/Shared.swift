@@ -14,6 +14,7 @@ import Photos
 class Shared {
 	
 	var currenUser = Auth.auth().currentUser
+	let cellID = "cellID"
 	
 	private static var sharedInstance : Shared?
 	

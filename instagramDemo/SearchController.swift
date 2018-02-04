@@ -11,7 +11,8 @@ import Firebase
 
 class SearchController : UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
     
-    let cellID = "cellID"
+//    let cellID = "cellID"
+	let cellID = Shared.shared().cellID
 	var users = [User]()
 	var filterdUser = [User]()
 	

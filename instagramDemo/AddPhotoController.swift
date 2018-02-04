@@ -12,7 +12,8 @@ import Photos
 class AddPhotoController : UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     let headerID = "headerid"
-    let cellID = "cellid"
+//    let cellID = "cellid"
+	let cellID = Shared.shared().cellID
     var images = [UIImage]()
     var assets = [PHAsset]()
     var selectedImage : UIImage?

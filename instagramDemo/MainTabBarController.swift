@@ -73,7 +73,6 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate{
         viewControllers = [homeNavConroller,searchController,plusNavContoller, likeNavController, userProfileNavController]
         
         //Modify tab bar item insets
-        
         guard let items = tabBar.items else {return}
         
         for item in items {

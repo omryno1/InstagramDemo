@@ -9,19 +9,20 @@
 import UIKit
 import Firebase
 
-class UserProfileController : UICollectionViewController , UICollectionViewDelegateFlowLayout{
+class UserProfileController : UICollectionViewController{
  
     var user : User?
 	var userId : String?
     var posts = [Post]()
-    let cellid = "cellid"
+//    let cellID = "cellid"
+	let cellID = Shared.shared().cellID
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         collectionView?.backgroundColor = .white
         collectionView?.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "headerid")
-        collectionView?.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellid)
+        collectionView?.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellID)
         
         fetchUser()
         setupLogOutButton()
@@ -37,7 +38,6 @@ class UserProfileController : UICollectionViewController , UICollectionViewDeleg
 			self.fetchOrderedPosts()
 		}
 	}
-    
     
 	fileprivate func fetchOrderedPosts(){
 		guard let uid = self.user?.uid else {return}
@@ -80,43 +80,45 @@ class UserProfileController : UICollectionViewController , UICollectionViewDeleg
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alertController, animated: true, completion: nil)
     }
+}
 
-
+extension UserProfileController: UICollectionViewDelegateFlowLayout {
+	
 	//MARK: - CollectionView Delegate Methods
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        //we know the the header is of type UserProfileHeader because we registed the class in view did load
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerid", for: indexPath) as! UserProfileHeader
-        
-        header.user = user
-        return header
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellid, for: indexPath) as! UserProfilePhotoCell
-        cell.post = posts[indexPath.item]
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width, height: 200)
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return posts.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellsize = (view.frame.width - 2) / 3
-        return CGSize(width: cellsize, height: cellsize)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
-    }
+	override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+		
+		//we know the the header is of type UserProfileHeader because we registed the class in view did load
+		let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerid", for: indexPath) as! UserProfileHeader
+		
+		header.user = user
+		return header
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		
+		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! UserProfilePhotoCell
+		cell.post = posts[indexPath.item]
+		return cell
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+		return CGSize(width: view.frame.width, height: 200)
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+		return posts.count
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+		let cellsize = (view.frame.width - 2) / 3
+		return CGSize(width: cellsize, height: cellsize)
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+		return 1
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+		return 1
+	}
 }
