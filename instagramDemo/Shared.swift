@@ -15,6 +15,7 @@ class Shared {
 	
 	var currenUser = Auth.auth().currentUser
 	let cellID = "cellID"
+	var allPosts = [Post]()
 	
 	private static var sharedInstance : Shared?
 	

@@ -9,6 +9,9 @@
 import UIKit
 
 struct Post {
+	
+	var id : String?
+	
     let user : User
     let imageURL : String
     let caption : String

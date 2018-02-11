@@ -21,6 +21,8 @@
 		CD6AFFC6202226460021FF38 /* CommentsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6AFFC5202226460021FF38 /* CommentsController.swift */; };
 		CD6AFFC8202226DC0021FF38 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6AFFC7202226DC0021FF38 /* Protocols.swift */; };
 		CD6AFFCA202373DF0021FF38 /* CustomSearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6AFFC9202373DF0021FF38 /* CustomSearchTextField.swift */; };
+		CD6AFFCE20278BEC0021FF38 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6AFFCD20278BEC0021FF38 /* Comment.swift */; };
+		CD6AFFD020296A850021FF38 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6AFFCF20296A850021FF38 /* CommentCell.swift */; };
 		CD763EDB1EA3B5DA000CD637 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD763EDA1EA3B5DA000CD637 /* LoginController.swift */; };
 		CD7B5F101E9F4AF000BEF8BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F0F1E9F4AF000BEF8BD /* AppDelegate.swift */; };
 		CD7B5F121E9F4AF000BEF8BD /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7B5F111E9F4AF000BEF8BD /* SignUpController.swift */; };
@@ -59,6 +61,8 @@
 		CD6AFFC5202226460021FF38 /* CommentsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsController.swift; sourceTree = "<group>"; };
 		CD6AFFC7202226DC0021FF38 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		CD6AFFC9202373DF0021FF38 /* CustomSearchTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchTextField.swift; sourceTree = "<group>"; };
+		CD6AFFCD20278BEC0021FF38 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		CD6AFFCF20296A850021FF38 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		CD763EDA1EA3B5DA000CD637 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		CD7B5F0C1E9F4AF000BEF8BD /* instagramDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = instagramDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD7B5F0F1E9F4AF000BEF8BD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -127,6 +131,7 @@
 			children = (
 				CD2EB9A61EB0DBEC00702F40 /* Post.swift */,
 				CD2EB9A81EB0EC4E00702F40 /* User.swift */,
+				CD6AFFCD20278BEC0021FF38 /* Comment.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -144,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				CD6AFFC5202226460021FF38 /* CommentsController.swift */,
+				CD6AFFCF20296A850021FF38 /* CommentCell.swift */,
 			);
 			name = Comments;
 			sourceTree = "<group>";
@@ -372,12 +378,14 @@
 				CD99AA4D201F7F010011B6E7 /* CustomAnimationDismisser.swift in Sources */,
 				CD2EB9A91EB0EC4E00702F40 /* User.swift in Sources */,
 				CDCD722A1ED094E500C9225F /* SearchController.swift in Sources */,
+				CD6AFFD020296A850021FF38 /* CommentCell.swift in Sources */,
 				CD6AFFC6202226460021FF38 /* CommentsController.swift in Sources */,
 				CD30D2761EB86AE20000C19F /* HomePostCell.swift in Sources */,
 				CDEF4AB81EA9D38100FDD327 /* SharePhotoController.swift in Sources */,
 				CDC4C3D22005021B0027E78E /* CameraController.swift in Sources */,
 				CD1E9AC31EA66A9100F4102C /* PhotoThumbnailCell.swift in Sources */,
 				CD7B5F121E9F4AF000BEF8BD /* SignUpController.swift in Sources */,
+				CD6AFFCE20278BEC0021FF38 /* Comment.swift in Sources */,
 				CD30D2711EB85BE30000C19F /* CustomImageView.swift in Sources */,
 				CD6AFFC8202226DC0021FF38 /* Protocols.swift in Sources */,
 				CD7B5F101E9F4AF000BEF8BD /* AppDelegate.swift in Sources */,

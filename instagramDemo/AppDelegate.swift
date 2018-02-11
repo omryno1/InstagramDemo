@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
         window = UIWindow()
         window?.rootViewController = MainTabBarController()
-//		window?.rootViewController = CommentsConroller(collectionViewLayout: UICollectionViewLayout())
+//		window?.rootViewController = CommentsConroller(collectionViewLayout: UICollectionViewFlowLayout())
 		
         return true
     }

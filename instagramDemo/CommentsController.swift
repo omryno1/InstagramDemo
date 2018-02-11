@@ -7,13 +7,26 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
-class CommentsConroller: UICollectionViewController {
+class CommentsConroller: UICollectionViewController{
+	
+	var post : Post?
+	var comments = [Comment]()
+	let cellID = Shared.shared().cellID
+	let date = Date().timeIntervalSince1970
+	
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
 		navigationItem.title = "Comments"
-		collectionView?.backgroundColor = .red
+		navigationController?.navigationBar.isHidden = false
+		collectionView?.backgroundColor = .blue
+	
+		collectionView?.register(CommentCell.self, forCellWithReuseIdentifier: cellID)
+		
+		fetchComments()
 	}
 	
 	let textField : CustomSearchTextField = {
@@ -63,8 +76,45 @@ class CommentsConroller: UICollectionViewController {
 		return true
 	}
 	
+	fileprivate func fetchComments() {
+		guard let postID = post?.id else { return }
+		Database.fetchPostComments(postID: postID) { (comments) in
+			self.comments = comments
+			self.collectionView?.reloadData()
+		}
+		
+	}
+	
 	@objc func handlePost() {
 		print("posting your comment")
+		
+		guard let commentText = textField.text else { return }
+		guard let uid = Shared.shared().currenUser?.uid else { return }
+		guard let postID = post?.id else { return }
+		
+		let comment = ["uid" : uid, "creationDate" : date, "commentText" : commentText] as [String : Any]
+		
+		Database.postCommentToFirebaseDatabase(postID: postID, postData: comment) { (success) in
+			if (success) {
+				self.textField.text = ""
+			}
+		}
+	}
+}
+
+extension CommentsConroller : UICollectionViewDelegateFlowLayout {
+	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+		return self.comments.count
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+		return CGSize(width: view.frame.width, height: 50)
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! CommentCell
+		cell.comment = self.comments[indexPath.item]
+		return cell
 	}
 }
 

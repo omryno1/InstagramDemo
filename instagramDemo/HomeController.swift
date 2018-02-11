@@ -30,14 +30,18 @@ class HomeController : UICollectionViewController {
 	}
 	
 	func fetchAllPosts(){
-		fetchPosts()
-		fetchFollowingUserPosts()
+		guard let userID = Shared.shared().currenUser?.uid else { return }
+		Database.fetchAllPosts(currentUserID: userID) { (posts) in
+			self.posts = posts
+			self.EndRefredhing()
+			self.collectionView?.reloadData()
+		}
 	}
 	
 	@objc func handleRefresh(){
 		print("refreshing ...")
 		collectionView?.isUserInteractionEnabled = false
-		self.posts.removeAll()
+		Shared.shared().allPosts.removeAll()
 		collectionView?.reloadData()
 		fetchAllPosts()
 	}
@@ -48,31 +52,6 @@ class HomeController : UICollectionViewController {
 		self.collectionView?.reloadData()
 	}
 	
-	fileprivate func fetchPosts() {
-		guard let UserUID = Shared.shared().currenUser?.uid else { return }
-		Database.fetchUserWithUID(uid: UserUID) { (user) in
-			self.fetchPostsWithUser(user: user)
-		}		
-	}
-	
-	fileprivate func fetchFollowingUserPosts(){
-		guard let UserUID = Shared.shared().currenUser?.uid else { return }
-		Database.database().reference().child("Following").child(UserUID).observeSingleEvent(of: .value, with: { (snapshot) in
-			guard let followingDictionary = snapshot.value as? [String : Any] else {
-				self.EndRefredhing()
-				return
-			}
-			followingDictionary.forEach({ (key, value) in
-				Database.fetchUserWithUID(uid: key, complition: { (user) in
-					self.fetchPostsWithUser(user: user)
-				})
-			})
-			
-		}) { (err) in
-			print("Failed to fetch following id's")
-		}
-	}
-	
 	fileprivate func fetchPostsWithUser(user : User) {
 		let ref = Database.database().reference().child("posts").child(user.uid)
 		ref.observeSingleEvent(of: .value, with: { (snapshot) in
@@ -81,7 +60,8 @@ class HomeController : UICollectionViewController {
 				
 				guard let dictionary = value as? [String : Any] else {return}
 				
-				let post = Post(user: user, dictionary: dictionary)
+				var post = Post(user: user, dictionary: dictionary)
+				post.id = key
 				self.posts.append(post)
 			})
 			
@@ -112,18 +92,18 @@ extension HomeController : HomePostCellDelegate, UICollectionViewDelegateFlowLay
 	
 	//HomePostCellDelegate
 	func didTapComment(post: Post) {
-		let commentsController = CommentsConroller(collectionViewLayout: UICollectionViewLayout())
-		print("\(post.caption)")
+		let commentsController = CommentsConroller(collectionViewLayout: UICollectionViewFlowLayout())
+		commentsController.post = post
 		self.hidesBottomBarWhenPushed = true
 		navigationController?.pushViewController(commentsController, animated: true)
 		self.hidesBottomBarWhenPushed = false
 	}
 	
+	//CollectionView Delegate
 	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return posts.count
 	}
 	
-	//CollectionView Delegate	
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 		
 		var height = CGFloat(8 + 40 + 8) //Profile image with spacing
