@@ -42,7 +42,6 @@ class HomeController : UICollectionViewController {
 		print("refreshing ...")
 		collectionView?.isUserInteractionEnabled = false
 		Shared.shared().allPosts.removeAll()
-		collectionView?.reloadData()
 		fetchAllPosts()
 	}
 	

@@ -10,7 +10,30 @@ import Foundation
 import Firebase
 
 extension Database {
+	//MARK: - Fetch User
 	
+	static func fetchUserWithUID(uid : String, complition : @escaping (User)->()) {
+		Database.database().reference().child("Users").child(uid).observe(.value, with: { (snapshot) in
+			guard let userDictionary = snapshot.value as? [String : Any] else {return}
+			
+			let user = User(uid: uid, dictionary: userDictionary)
+			complition(user)
+			
+		}) { (err) in
+			print("Failed to load User", err)
+		}
+	}
+	
+	static func fetchUsersIFollow(uid : String, complition : @escaping ([String : Any])->()){
+		Database.database().reference().child("Following").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+			if (snapshot.hasChildren()){
+				guard let followingDictionary = snapshot.value as? [String : Any] else { return }
+				complition(followingDictionary)
+			}
+		}) { (err) in
+			print("Failed to fetch following id's")
+		}
+	}
 	
 	//MARK: - Posts
 	static func fetchAllPosts(currentUserID : String, complition : @escaping ([Post])->()) {
@@ -41,29 +64,6 @@ extension Database {
 				fetchUserPosts(userID: key, dispatchGroup: dispatchGroup)
 			})
 		})
-	}
-	
-	static func fetchUserWithUID(uid : String, complition : @escaping (User)->()) {
-		Database.database().reference().child("Users").child(uid).observe(.value, with: { (snapshot) in
-			guard let userDictionary = snapshot.value as? [String : Any] else {return}
-			
-			let user = User(uid: uid, dictionary: userDictionary)
-			complition(user)
-			
-		}) { (err) in
-			print("Failed to load User", err)
-		}
-	}
-	
-	 static func fetchUsersIFollow(uid : String, complition : @escaping ([String : Any])->()){
-		Database.database().reference().child("Following").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
-			if (snapshot.hasChildren()){
-				guard let followingDictionary = snapshot.value as? [String : Any] else { return }
-				complition(followingDictionary)
-			}
-		}) { (err) in
-			print("Failed to fetch following id's")
-		}
 	}
 	
 	
@@ -107,15 +107,55 @@ extension Database {
 		}
 	}
 	
-	static func fetchPostComments(postID : String, complition : @escaping ([Comment])->()){
+	static func fetchCommentsWithPostId(postId : String, complition : @escaping([Comment])->()) {
 		var comments = [Comment]()
-		Database.database().reference().child("Comments").child(postID).observe(.childAdded, with: { (snapshot) in
+		var commentedUsers = [String : User]()
+		let dispatchGroup = DispatchGroup()
+		let ref = Database.database().reference().child("Comments").child(postId)
+		
+		fetchCommentsDictionary(postId: postId, ref: ref) { (commentsDictionary) in
+			commentsDictionary.forEach({ (key, value) in
+				dispatchGroup.enter()
+				guard let dictionary = value as? [String : Any] else { return }
+				guard let userUID = dictionary["uid"] as? String else { return }
+				
+				self.fetchUserWithUID(uid: userUID, complition: { (user) in
+					commentedUsers[userUID] = user
+					dispatchGroup.leave()
+				})
+			})
+			
+			dispatchGroup.notify(queue: .main, execute: {
+				fetchAllComments(postID: postId, ref: ref,commentedUsers: commentedUsers) { (comment) in
+					comments.append(comment)
+					complition(comments)
+				}
+			})
+		}
+	}
+	
+	static func fetchCommentsDictionary(postId : String,
+										ref : DatabaseReference,
+										complition : @escaping ([String : Any])->()) {
+		ref.observeSingleEvent(of: .value) { (snapshot) in
+			if (snapshot.hasChildren()){
+				guard let commentsDictionary = snapshot.value as? [String : Any] else { return }
+				complition(commentsDictionary)
+			}
+		}
+	}
+	
+	static func fetchAllComments(postID : String,
+								 ref : DatabaseReference,
+								 commentedUsers : [String : User],
+								 complition : @escaping (Comment)->()) {
+		ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
 			guard let dictionary = snapshot.value as? [String : Any] else { return }
+			guard let userUID = dictionary["uid"] as? String else { return }
+			guard let user = commentedUsers[userUID] else { return }
 			
-			let comment = Comment(dictionary: dictionary)
-			comments.append(comment)
-			
-			complition(comments)
+			let comment = Comment(user: user, dictionary: dictionary)
+			complition(comment)
 			
 		}) { (err) in
 			print("Failed to fetch Post comments", err)
