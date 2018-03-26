@@ -21,6 +21,12 @@ class HomePostCell: UICollectionViewCell {
             userProfileImage.loadImage(ImageURL: profieImageURL)
             guard let profileName = post?.user.username else {return}
             userProfileName.text = profileName
+			guard let hasLike = post?.hasLikes else { return }
+			likeButton.setImage(hasLike ?
+				#imageLiteral(resourceName: "like_selected").withRenderingMode(.alwaysOriginal)
+				:
+				#imageLiteral(resourceName: "like_unselected").withRenderingMode(.alwaysOriginal)
+				, for: .normal)
             
             setupAttributedCaption()
             
@@ -54,9 +60,10 @@ class HomePostCell: UICollectionViewCell {
         return iv
     }()
     
-    let likeButton : UIButton = {
+    lazy var likeButton : UIButton = {
         let bt = UIButton(type: .system)
         bt.setImage(#imageLiteral(resourceName: "like_unselected").withRenderingMode(.alwaysOriginal), for: .normal)
+		bt.addTarget(self, action: #selector(handleLike), for: .touchUpInside)
         return bt
     }()
     
@@ -85,8 +92,11 @@ class HomePostCell: UICollectionViewCell {
         return label
     }()
 	
+	@objc func handleLike() {
+		self.delegate?.didLike(for: self)
+	}
+	
 	@objc func handleComment() {
-		print("Comment Was Tapped")
 		guard let post = self.post else { return }
 		self.delegate?.didTapComment(post: post)
 	}

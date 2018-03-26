@@ -98,6 +98,23 @@ extension HomeController : HomePostCellDelegate, UICollectionViewDelegateFlowLay
 		self.hidesBottomBarWhenPushed = false
 	}
 	
+	func didLike(for cell: HomePostCell) {
+		guard let indexPath = collectionView?.indexPath(for: cell) else { return }
+		var post = posts[indexPath.item]
+		
+		guard let currentUserUid = Shared.shared().currenUser?.uid else { return }
+		guard let postId = post.id else { return }
+		let values = [currentUserUid: post.hasLikes ? 0 : 1]
+		
+		Database.changePostLike(postId: postId, values: values) { (success) in
+			if (success) {
+				post.hasLikes = !post.hasLikes
+				self.posts[indexPath.item] = post
+				self.collectionView?.reloadItems(at: [indexPath])
+			}
+		}
+	}
+	
 	//CollectionView Delegate
 	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return posts.count

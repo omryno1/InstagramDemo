@@ -78,6 +78,11 @@ extension Database {
 					
 					var post = Post(user: user, dictionary: dictionary)
 					post.id = key
+					didLikePost(postId: key, complition: { (result) in
+						if (result) {
+							post.hasLikes = result
+						}
+					})
 					Shared.shared().allPosts.append(post)
 				})
 				
@@ -160,6 +165,32 @@ extension Database {
 		}) { (err) in
 			print("Failed to fetch Post comments", err)
 			return
+		}
+	}
+	
+	//MARK: Likes
+	static func changePostLike (postId: String, values: [String : Int], complition : @escaping(Bool)->()) {
+		Database.database().reference().child("likes").child(postId).updateChildValues(values) { (err, _) in
+			if let err = err {
+				print("failed like/unLike post", err)
+				complition(false)
+			}
+			print("Succesfully liked/unLiked Post")
+			complition(true)
+		}
+	}
+	
+	static func didLikePost(postId: String, complition : @escaping(Bool)->()){
+		guard let uid = Shared.shared().currenUser?.uid else { return }
+		Database.database().reference().child("Likes").child(postId).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+			if let value = snapshot.value as? Int, value == 1 {
+				complition(true)
+			}else {
+				complition(false)
+			}
+		}) { (err) in
+			print("Failed to validate like for \(postId) post", err)
+			complition(false)
 		}
 	}
 }
