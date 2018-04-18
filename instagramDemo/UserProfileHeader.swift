@@ -9,6 +9,11 @@
 import UIKit
 import FirebaseDatabase
 
+protocol UserProfileHeaderDelegate {
+	func didChangeToListView()
+	func didChangeToGridView()
+}
+
 class UserProfileHeader : UICollectionViewCell {
 	
 	enum EditFollowBtn {
@@ -25,6 +30,7 @@ class UserProfileHeader : UICollectionViewCell {
         }
     }
 	
+	var delegate: UserProfileHeaderDelegate?
 	var mainProfileButton = EditFollowBtn.EditProfile
     
     let profileImageView : CustomImageView = {
@@ -33,16 +39,18 @@ class UserProfileHeader : UICollectionViewCell {
         return iv
     }()
     
-    let gridButton: UIButton = {
+    lazy var gridButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "grid"), for: .normal)
+		button.addTarget(self, action: #selector(handleChangeToGridView), for: .touchUpInside)
         return button
     }()
     
-    let listButton: UIButton = {
+    lazy var listButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "list"), for: .normal)
         button.tintColor = UIColor(white: 0, alpha: 0.2)
+		button.addTarget(self, action: #selector(handleChangeToListView), for: .touchUpInside)
         return button
     }()
     
@@ -234,6 +242,18 @@ class UserProfileHeader : UICollectionViewCell {
         bottomDivider.anchor(top: stackView.bottomAnchor , left: leftAnchor, bottom: nil, right: rightAnchor, topPadding: 0, leftPadding: 0, bottomPadding: 0, rightPadding: 0, width: 0, height: 0.5)
     
     }
+	
+	@objc fileprivate func handleChangeToGridView() {
+		listButton.tintColor = UIColor(white: 0, alpha: 0.2)
+		gridButton.tintColor = .mainBlue()
+		delegate?.didChangeToGridView()
+	}
+	
+	@objc fileprivate func handleChangeToListView() {
+		gridButton.tintColor = UIColor(white: 0, alpha: 0.2)
+		listButton.tintColor = .mainBlue()
+		delegate?.didChangeToListView()
+	}
     
     fileprivate func setupProfileImage(){
         guard let profileImageURL = user?.profileImageURL else { return }

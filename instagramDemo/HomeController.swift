@@ -12,7 +12,7 @@ import Firebase
 class HomeController : UICollectionViewController {
 	
 //	let cellID = "cellId"
-	let cellID = Shared.shared().cellID
+	let cellID = Shared.shared().homePostCellID
 	var posts = [Post]()
 	
 	override func viewDidLoad() {
