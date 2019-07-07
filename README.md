@@ -1,7 +1,7 @@
 # InstagramDemo - Inspired by Brian Voong : https://github.com/bhlvoong
 reBuilding the instagram basic app using Google FireBase and implementing basic features like :
 * Posing a photo.
-* Likingn a photo.
+* Liking a photo.
 * Following & viewing other people posts.
 * Commenting on different posts.
 * managing your profile.
